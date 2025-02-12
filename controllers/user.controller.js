@@ -62,15 +62,27 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
-    const token = jwt.sign(
+    // Generate Access Token (Short-lived)
+    const accessToken = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
+      { expiresIn: "45m" }
     );
+
+    // Generate Refresh Token (Long-lived)
+    const refreshToken = jwt.sign(
+      { id: user._id },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // Save refresh token in user database or in-memory storage
+    user.refreshToken = refreshToken;
+    await user.save();
+
     res.json({
-      token,
+      accessToken,
+      refreshToken,
       user: {
         id: user.id,
         name: user.name,
@@ -221,5 +233,47 @@ export const resetPassword = async (req, res) => {
     res.json({ msg: "Password reset successfully" });
   } catch (error) {
     res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};
+// verify refresh token
+export const refreshToken = async (req, res) => {
+  const { token } = req.body;
+  if (!token) return res.status(401).json({ msg: "Access Denied" });
+
+  try {
+    // Verify the refresh token
+    const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+
+    // Find the user and ensure the refresh token is still valid
+    const user = await User.findById(decoded.id);
+    if (!user || user.refreshToken !== token)
+      return res.status(403).json({ msg: "Invalid Refresh Token" });
+
+    // Generate a new Access Token
+    const newAccessToken = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.json({ accessToken: newAccessToken });
+  } catch (err) {
+    res.status(403).json({ msg: "Invalid or Expired Refresh Token" });
+  }
+};
+
+export const logout = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const user = await User.findOne({ refreshToken: token });
+    if (!user) return res.status(403).json({ msg: "Invalid Request" });
+
+    user.refreshToken = null;
+    await user.save();
+
+    res.json({ msg: "Logged out successfully" });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error" });
   }
 };
