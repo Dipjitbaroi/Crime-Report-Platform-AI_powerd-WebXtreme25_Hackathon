@@ -12,10 +12,25 @@ export const createCrimePost = async (req, res) => {
 
 export const getAllCrimePosts = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit) || 10; // Default limit of 10
+    const skip = (page - 1) * limit;
+
     const crimePosts = await Crime_Posts.find()
       .populate("medias")
-      .populate("votes");
-    res.status(200).json(crimePosts);
+      .populate("votes")
+      .skip(skip)
+      .limit(limit);
+
+    const totalCrimePosts = await Crime_Posts.countDocuments();
+    const totalPages = Math.ceil(totalCrimePosts / limit);
+
+    res.status(200).json({
+      currentPage: page,
+      totalPages,
+      totalCrimePosts,
+      crimePosts,
+    });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

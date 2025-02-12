@@ -9,7 +9,7 @@ import OTP from "../models/otp.model.js";
 export const register = async (req, res) => {
   const { name, email, password, phone } = req.body;
 
-  try { 
+  try {
     // Email validation regex
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     // Phone validation regex (supports various formats)
@@ -39,7 +39,15 @@ export const register = async (req, res) => {
     user = new User({ name, email, password, phone });
     await user.save();
 
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
     res.json({
+      token: token,
       user: {
         id: user.id,
         name: user.name,
