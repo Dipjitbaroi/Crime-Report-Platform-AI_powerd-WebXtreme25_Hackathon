@@ -83,7 +83,6 @@ export const login = async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "7d" }
     );
-
     // Save refresh token in user database or in-memory storage
     user.refreshToken = refreshToken;
     await user.save();
@@ -99,6 +98,7 @@ export const login = async (req, res) => {
       },
     });
   } catch (err) {
+    console.error("Error:", err.stack);
     res.status(500).json({ msg: "Server error" });
   }
 };
