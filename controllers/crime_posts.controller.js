@@ -1,4 +1,4 @@
-import Crime_Posts from "../models/crime.model";
+import Crime_Posts from "../models/crime.model.js";
 
 export const createCrimePost = async (req, res) => {
   try {
