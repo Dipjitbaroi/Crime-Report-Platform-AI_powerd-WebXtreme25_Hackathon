@@ -9,7 +9,7 @@ import OTP from "../models/otp.model.js";
 export const register = async (req, res) => {
   const { name, email, password, phone } = req.body;
 
-  try {
+  try { 
     // Email validation regex
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     // Phone validation regex (supports various formats)
