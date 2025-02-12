@@ -36,3 +36,35 @@ export async function callDescriptionGen(prompt) {
     throw error;
   }
 }
+
+export async function detectFakeReport(reportText, image) {
+  const response = await openAiclient.chat.completions.create({
+    model: "gpt-4-turbo",
+    messages: [
+      {
+        role: "system",
+        content: "You are an AI that detects potentially fake crime reports.",
+      },
+      {
+        role: "user",
+        content: `Analyze this crime report and provide a confidence score: ${reportText}`,
+      },
+      {
+        role: "user",
+        content: "Here is an image for additional verification.",
+        image: image,
+      },
+    ],
+  });
+
+  const aiResponse = response.choices[0]?.message?.content;
+  console.log("AI Response:", aiResponse);
+
+  const confidenceScore = extractConfidenceScore(aiResponse);
+  return confidenceScore;
+}
+
+function extractConfidenceScore(aiResponse) {
+  const match = aiResponse.match(/([0-9]+)%/);
+  return match ? parseInt(match[1], 10) : 50;
+}
