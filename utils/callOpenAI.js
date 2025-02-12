@@ -36,7 +36,7 @@ export async function callDescriptionGen(prompt) {
     throw error;
   }
 }
-
+// new code deploy
 export async function detectFakeReport(reportText, image) {
   const response = await openAiclient.chat.completions.create({
     model: "gpt-4-turbo",
