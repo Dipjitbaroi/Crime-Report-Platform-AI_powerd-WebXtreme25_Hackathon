@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
 import { generateDescription } from "./controllers/description-genaration.controller.js";
+import { getCrimeForecast } from "./controllers/crime-forcaste.controller.js";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use("/api/users", userRoutes);
 app.use("/api/description-genration", generateDescription);
+app.use("/api/crime-forecast", getCrimeForecast);
 
 mongoose
   .connect(process.env.MONGO_URI)
