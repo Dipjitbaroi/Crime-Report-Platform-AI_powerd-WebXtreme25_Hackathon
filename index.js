@@ -8,12 +8,18 @@ import commentRoutes from "./routes/comment.route.js";
 import { generateDescription } from "./controllers/description-genaration.controller.js";
 // import { getCrimeForecast } from "./controllers/crime-forcaste.controller.js";
 import { fakedetection } from "./controllers/detect-fake.controller.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use("/api/users", userRoutes);
 app.use("/api/crimes", crimeRoutes);
