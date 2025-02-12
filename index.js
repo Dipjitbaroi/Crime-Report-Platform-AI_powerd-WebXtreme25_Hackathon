@@ -14,6 +14,10 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/description-genration", generateDescription);
 app.use("/api/crime-forecast", getCrimeForecast);
+//health route
+app.get("/api/health", (req, res) => {
+  res.status(200).send("Server is running");
+});
 
 mongoose
   .connect(process.env.MONGO_URI)
