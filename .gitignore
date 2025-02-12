@@ -2,4 +2,3 @@ node_modules
 
 .env
 
-controllers/firebase-adminsdk.json
