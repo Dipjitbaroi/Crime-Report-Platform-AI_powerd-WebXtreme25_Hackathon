@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Crime_Posts from "./crime.model";
+import Crime_Posts from "./crime.model.js";
 
 const VoteSchema = new mongoose.Schema(
   {

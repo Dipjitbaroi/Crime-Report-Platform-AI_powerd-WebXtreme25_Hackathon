@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Crime_Posts from "./crime.model";
-import Users from "./user.model";
+import Crime_Posts from "./crime.model.js";
+import Users from "./user.model.js";
 
 const CommentSchema = new mongoose.Schema(
   {
@@ -15,7 +15,7 @@ const CommentSchema = new mongoose.Schema(
       ref: "Users",
     },
     description: {
-      type: Text,
+      type: String,
     },
     medias: [
       {

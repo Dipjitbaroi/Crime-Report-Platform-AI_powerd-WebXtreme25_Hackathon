@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import Medias from "./media.model";
-import Votes from "./votes.model";
-import Users from "./user.model";
+import Medias from "./media.model.js";
+import Votes from "./votes.model.js";
+import Users from "./user.model.js";
 
 const CrimePostSchema = new mongoose.Schema(
   {
@@ -15,7 +15,7 @@ const CrimePostSchema = new mongoose.Schema(
       required: true,
     },
     description: {
-      type: Text,
+      type: String,
     },
     medias: [
       {

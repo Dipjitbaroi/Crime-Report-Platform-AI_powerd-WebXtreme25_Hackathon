@@ -11,18 +11,18 @@ import { checkToken } from "../middlewares/checkToken.js";
 const router = express.Router();
 
 // Create a new crime post
-router.post("/crimes", checkToken, createCrimePost);
+router.post("/add", checkToken, createCrimePost);
 
 // Get all crime posts
-router.get("/crimes", checkToken, getAllCrimePosts);
+router.get("/get", checkToken, getAllCrimePosts);
 
 // Get a single crime post by ID
-router.get("/crimes/:id", checkToken, getCrimePostById);
+router.get("/get/:id", checkToken, getCrimePostById);
 
 // Update a crime post by ID
-router.put("/crimes/:id", checkToken, updateCrimePost);
+router.put("/update/:id", checkToken, updateCrimePost);
 
 // Delete a crime post by ID
-router.delete("/crimes/:id", checkToken, deleteCrimePost);
+router.delete("/delete/:id", checkToken, deleteCrimePost);
 
 export default router;

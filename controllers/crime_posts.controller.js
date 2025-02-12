@@ -1,9 +1,53 @@
 import Crime_Posts from "../models/crime.model.js";
+import Medias from "../models/media.model.js";
 
 export const createCrimePost = async (req, res) => {
   try {
-    const crimePost = new Crime_Posts(req.body);
+    const {
+      user_id,
+      title,
+      description,
+      medias,
+      address,
+      crime_time,
+      votes,
+      verified_score,
+    } = req.body;
+
+    // Save media items and get their IDs
+    const mediaIds = [];
+    for (const media of medias) {
+      const newMedia = new Medias({
+        Crime_Posts_id: null, // Temporarily setting it to null
+        type: media.type,
+        url: media.url,
+      });
+      const savedMedia = await newMedia.save();
+      mediaIds.push(savedMedia._id);
+    }
+
+    // Create the crime post with the media IDs
+    const crimePost = new Crime_Posts({
+      user_id,
+      title,
+      description,
+      medias: mediaIds,
+      address,
+      crime_time,
+      votes,
+      verified_score,
+    });
+
+    // Save the crime post
     const savedCrimePost = await crimePost.save();
+
+    // Update the media items with the actual crime post ID
+    for (const mediaId of mediaIds) {
+      await Medias.findByIdAndUpdate(mediaId, {
+        Crime_Posts_id: savedCrimePost._id,
+      });
+    }
+
     res.status(201).json(savedCrimePost);
   } catch (error) {
     res.status(400).json({ msg: error.message });
