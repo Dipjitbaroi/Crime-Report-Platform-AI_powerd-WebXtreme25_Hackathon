@@ -7,6 +7,8 @@ import {
   deleteCrimePost,
 } from "../controllers/crime_posts.controller.js";
 import { checkToken } from "../middlewares/checkToken.js";
+import { addVote, deleteVote } from "../controllers/vote.controller.js";
+import { addComment, deleteComment } from "../controllers/comments.controller.js";
 
 const router = express.Router();
 
@@ -24,5 +26,18 @@ router.put("/update/:id", checkToken, updateCrimePost);
 
 // Delete a crime post by ID
 router.delete("/delete/:id", checkToken, deleteCrimePost);
+
+// Add a vote to a crime post
+router.post("/votes", checkToken, addVote);
+
+// Remove a vote from a crime post
+router.delete("/votes", checkToken, deleteVote);
+
+// Route to add a comment
+router.post("/comments", addComment);
+
+// Route to delete a comment
+router.delete("/comments/:commentId", deleteComment);
+
 
 export default router;

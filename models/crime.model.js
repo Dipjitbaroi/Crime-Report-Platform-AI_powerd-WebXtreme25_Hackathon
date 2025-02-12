@@ -36,7 +36,6 @@ const CrimePostSchema = new mongoose.Schema(
     },
     votes: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: "Votes",
     },
     verified_score: {

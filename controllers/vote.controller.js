@@ -4,10 +4,17 @@ export const addVote = async (req, res) => {
   try {
     const { crimePostId, userId, voteType } = req.body;
 
+    console.log(req.body);
     // Find the vote document related to the crime post
     let vote = await Votes.findOne({ Crime_Posts_id: crimePostId });
+
+    // If the vote document doesn't exist, create a new one
     if (!vote) {
-      return res.status(404).json({ msg: "Crime post not found" });
+      vote = new Votes({
+        Crime_Posts_id: crimePostId,
+        up_votes: [],
+        down_votes: [],
+      });
     }
 
     // Check if user has already upvoted or downvoted

@@ -3,8 +3,6 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
 import crimeRoutes from "./routes/crime_posts.route.js";
-import voteRoutes from "./routes/vote.route.js";
-import commentRoutes from "./routes/comment.route.js";
 import { generateDescription } from "./controllers/description-genaration.controller.js";
 // import { getCrimeForecast } from "./controllers/crime-forcaste.controller.js";
 import { fakedetection } from "./controllers/detect-fake.controller.js";
@@ -23,8 +21,6 @@ app.use(
 
 app.use("/api/users", userRoutes);
 app.use("/api/crimes", crimeRoutes);
-app.use("/api/votes", voteRoutes);
-app.use("/api/comments", commentRoutes);
 app.use("/api/description-genration", generateDescription);
 // app.use("/api/crime-forecast", getCrimeForecast);
 app.use("/api/fake", fakedetection);

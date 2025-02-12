@@ -5,7 +5,7 @@ const MediaSchema = new mongoose.Schema(
   {
     Crime_Posts_id: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      // required: true,
       ref: "Crime_Posts",
     },
     type: {
